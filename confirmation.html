@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tiny Traces: A Hands-on Microplastics Workshop — Confirm Your Attendance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ---- Navy / gold brand palette ---- */
+  :root {
+    --accent: #cda144;
+    --accent-soft: #e6c878;
+    --navy: #0a1930;
+    --navy-light: #16304f;
+    --bg: #eef1f6;
+    --card: #ffffff;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --error: #dc2626;
+    --success: #16a34a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Manrope', 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 0 0 60px;
+  }
+  .wrap { max-width: 520px; margin: 0 auto; padding: 0 16px; }
+  .banner {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+    padding: 32px 16px 44px;
+    margin-bottom: -24px;
+    text-align: center;
+  }
+  .banner h1 {
+    margin: 0 0 4px; font-size: 22px; color: var(--accent-soft);
+    text-transform: uppercase; letter-spacing: .03em; font-weight: 800;
+  }
+  .banner p { margin: 0; color: #f1f4fa; font-size: 14.5px; font-style: italic; }
+  .card {
+    background: var(--card); border-radius: 14px;
+    box-shadow: 0 16px 40px rgba(11, 31, 58, 0.18); padding: 30px 28px;
+    position: relative; z-index: 2;
+  }
+  label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+  input[type=text] {
+    width: 100%; padding: 11px 12px; border: 1px solid var(--border); border-radius: 8px;
+    font-size: 16px; font-family: inherit; background: #fafbfc; margin-bottom: 14px;
+  }
+  input[type=text]:focus {
+    outline: none; border-color: var(--navy); box-shadow: 0 0 0 3px rgba(11,31,58,0.1); background: #fff;
+  }
+  button.primary {
+    width: 100%; padding: 13px; border: none; border-radius: 8px;
+    background: var(--navy); color: #fff; font-size: 15px; font-weight: 700;
+    letter-spacing: .02em; cursor: pointer; text-transform: uppercase;
+  }
+  button.primary:hover { background: var(--navy-light); }
+  button.primary:disabled { background: #9ca3af; cursor: not-allowed; }
+  .msg { display: none; margin-top: 14px; padding: 11px 14px; border-radius: 8px; font-size: 13.5px; }
+  .msg.error { display: block; background: #fef2f2; color: var(--error); border: 1px solid #fecaca; }
+  .msg.info { display: block; background: #f0f6ff; color: var(--navy); border: 1px solid #c7d8fb; }
+  #lookupSection, #resultSection { display: block; }
+  #resultSection { display: none; }
+  .result-name { font-size: 18px; font-weight: 800; color: var(--navy); margin: 0 0 4px; }
+  .result-event { font-size: 14.5px; color: var(--muted); margin: 0 0 22px; }
+  .yn-row { display: flex; gap: 12px; margin-top: 4px; }
+  .yn-row button {
+    flex: 1; padding: 13px; border-radius: 8px; font-size: 14.5px; font-weight: 700;
+    cursor: pointer; border: none; letter-spacing: .01em;
+  }
+  .btn-yes { background: var(--success); color: #fff; }
+  .btn-yes:hover { background: #128a3e; }
+  .btn-no { background: #6b7280; color: #fff; }
+  .btn-no:hover { background: #545c68; }
+  .already-note {
+    font-size: 12.5px; color: var(--muted); background: #f8fafc; border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 12px; margin-bottom: 18px;
+  }
+  .confirmed-screen { text-align: center; padding: 10px 0; }
+  .confirmed-icon {
+    width: 56px; height: 56px; border-radius: 50%; background: #f0fdf4; border: 2px solid var(--success);
+    display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;
+  }
+  .confirmed-screen h2 { margin: 0 0 8px; font-size: 19px; color: var(--navy); font-weight: 800; }
+  .confirmed-screen p { margin: 0; color: var(--text); font-size: 14.5px; line-height: 1.6; }
+  .change-link {
+    display: block; text-align: center; margin-top: 18px; font-size: 12.5px;
+    color: var(--muted); text-decoration: underline; cursor: pointer; background: none; border: none; font-family: inherit;
+  }
+  .footer { text-align: center; color: var(--muted); font-size: 12px; margin-top: 24px; line-height: 1.7; }
+  .footer .tagline { font-style: italic; color: #8b95a3; }
+</style>
+</head>
+<body>
+<div class="banner">
+  <h1>Confirm Your Attendance</h1>
+  <p>Tiny Traces: A Hands-on Microplastics Workshop</p>
+</div>
+<div class="wrap">
+  <div class="card">
+
+    <div id="lookupSection">
+      <label>First Name</label>
+      <input type="text" id="firstNameInput" autocomplete="given-name">
+      <label>Last Name <span style="font-weight:400; color:var(--muted);">(Jr., III, etc. optional)</span></label>
+      <input type="text" id="lastNameInput" autocomplete="family-name">
+      <button class="primary" id="lookupBtn">Find My Registration</button>
+      <div class="msg" id="lookupMsg"></div>
+    </div>
+
+    <div id="resultSection">
+      <!-- Filled in dynamically depending on what lookupForConfirmation returns -->
+    </div>
+
+  </div>
+  <div class="footer">
+    <div class="tagline">RainLab. Building Connections. Driving Discoveries.</div>
+    <div>Presented by RainPhil Inc.</div>
+  </div>
+</div>
+
+<script>
+const EVENT_CONFIG = {
+  eventCode: "TINYTRACESAHANDSONMICROPLASTICSWORKSHOP",
+  webAppUrl: "https://script.google.com/macros/s/AKfycbx0fOMWlJnimqhbFo6DTeWFYQr1qUT4NfIqRiIClBCmuPuxLN-Xx7O0wQNwlg8XNe5V/exec"
+};
+
+const lookupSection = document.getElementById("lookupSection");
+const resultSection = document.getElementById("resultSection");
+const lookupBtn = document.getElementById("lookupBtn");
+const lookupMsg = document.getElementById("lookupMsg");
+let lastLookupPayload = null;
+
+lookupBtn.addEventListener("click", async function () {
+  const firstName = document.getElementById("firstNameInput").value.trim();
+  const lastName = document.getElementById("lastNameInput").value.trim();
+  lookupMsg.className = "msg";
+  lookupMsg.textContent = "";
+
+  if (!firstName || !lastName) {
+    lookupMsg.className = "msg error";
+    lookupMsg.textContent = "Please enter both your first and last name.";
+    return;
+  }
+
+  lookupBtn.disabled = true;
+  lookupBtn.textContent = "Searching…";
+
+  const payload = { eventCode: EVENT_CONFIG.eventCode, firstName, lastName };
+  lastLookupPayload = payload;
+
+  try {
+    const res = await fetch(EVENT_CONFIG.webAppUrl + "?action=lookupForConfirmation", { method: "POST", body: JSON.stringify(payload) });
+    const result = JSON.parse(await res.text());
+
+    lookupBtn.disabled = false;
+    lookupBtn.textContent = "Find My Registration";
+
+    if (!result.ok) {
+      lookupMsg.className = "msg error";
+      lookupMsg.textContent = result.error || "Something went wrong. Please try again.";
+      return;
+    }
+    if (!result.found) {
+      lookupMsg.className = "msg error";
+      lookupMsg.textContent = "We couldn't find a registration under that name for this event. Please check the spelling, or contact us if you believe this is a mistake.";
+      return;
+    }
+    renderResult(result);
+  } catch (err) {
+    lookupBtn.disabled = false;
+    lookupBtn.textContent = "Find My Registration";
+    lookupMsg.className = "msg error";
+    lookupMsg.textContent = "Something went wrong: " + err.message + ". Please try again.";
+  }
+});
+
+function renderResult(r) {
+  lookupSection.style.display = "none";
+  resultSection.style.display = "block";
+
+  if (r.status === "Pending") {
+    resultSection.innerHTML = `
+      <p class="result-name">Hi ${escapeHtml(r.firstName)},</p>
+      <div class="msg info" style="display:block;">
+        Your registration for <strong>${escapeHtml(r.eventName)}</strong> is still awaiting approval —
+        we'll email you as soon as it's confirmed, and you're welcome to come back and confirm your attendance then.
+      </div>
+      <button type="button" class="change-link" onclick="resetLookup()">Search again</button>`;
+    return;
+  }
+  if (r.status !== "Approved") {
+    resultSection.innerHTML = `
+      <p class="result-name">Hi ${escapeHtml(r.firstName)},</p>
+      <div class="msg info" style="display:block;">
+        We couldn't find an approved registration under that name for <strong>${escapeHtml(r.eventName)}</strong>.
+        If you believe this is a mistake, please reach out to us directly.
+      </div>
+      <button type="button" class="change-link" onclick="resetLookup()">Search again</button>`;
+    return;
+  }
+
+  const alreadyNote = r.alreadyConfirmed
+    ? `<div class="already-note">You previously replied <strong>"${r.alreadyConfirmed}"</strong>. Tapping a button below will update your response.</div>`
+    : "";
+
+  resultSection.innerHTML = `
+    <p class="result-name">Hi ${escapeHtml(r.firstName)},</p>
+    <p class="result-event">Will you still be able to join us for <strong>${escapeHtml(r.eventName)}</strong> on ${escapeHtml(r.eventDate)}?</p>
+    ${alreadyNote}
+    <div class="yn-row">
+      <button class="btn-yes" id="btnYes">Yes, I'll be there</button>
+      <button class="btn-no" id="btnNo">No, I can't make it</button>
+    </div>
+    <div class="msg" id="confirmMsg"></div>
+    <button type="button" class="change-link" onclick="resetLookup()">Not you? Search again</button>`;
+
+  document.getElementById("btnYes").addEventListener("click", () => submitConfirmation(r.registrationId, "yes", r.firstName));
+  document.getElementById("btnNo").addEventListener("click", () => submitConfirmation(r.registrationId, "no", r.firstName));
+}
+
+async function submitConfirmation(registrationId, response, firstName) {
+  const yesBtn = document.getElementById("btnYes");
+  const noBtn = document.getElementById("btnNo");
+  const confirmMsg = document.getElementById("confirmMsg");
+  yesBtn.disabled = true; noBtn.disabled = true;
+  confirmMsg.className = "msg"; confirmMsg.textContent = "";
+
+  try {
+    const res = await fetch(EVENT_CONFIG.webAppUrl + "?action=confirmAttendancePublic", {
+      method: "POST",
+      body: JSON.stringify({ registrationId, response })
+    });
+    const result = JSON.parse(await res.text());
+    if (!result.ok) {
+      confirmMsg.className = "msg error";
+      confirmMsg.textContent = result.error || "Something went wrong. Please try again.";
+      yesBtn.disabled = false; noBtn.disabled = false;
+      return;
+    }
+    resultSection.innerHTML = `
+      <div class="confirmed-screen">
+        <div class="confirmed-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 13l4 4L19 7" stroke="#16a34a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h2>Thanks, ${escapeHtml(firstName)}!</h2>
+        <p>${response === "yes" ? "We've got you down as attending — see you there!" : "Thanks for letting us know — we hope to see you at a future event."}</p>
+      </div>`;
+  } catch (err) {
+    confirmMsg.className = "msg error";
+    confirmMsg.textContent = "Something went wrong: " + err.message + ". Please try again.";
+    yesBtn.disabled = false; noBtn.disabled = false;
+  }
+}
+
+function resetLookup() {
+  resultSection.style.display = "none";
+  resultSection.innerHTML = "";
+  lookupSection.style.display = "block";
+  lookupMsg.className = "msg"; lookupMsg.textContent = "";
+}
+
+function escapeHtml(str) {
+  const div = document.createElement("div");
+  div.textContent = str == null ? "" : String(str);
+  return div.innerHTML;
+}
+</script>
+</body>
+</html>
