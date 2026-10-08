@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tiny Traces: A Hands-on Microplastics Workshop — Feedback</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #cda144;
+    --accent-soft: #e6c878;
+    --navy: #0a1930;
+    --navy-light: #16304f;
+    --bg: #eef1f6;
+    --card: #ffffff;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --error: #dc2626;
+    --success: #16a34a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Manrope', 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 0 0 60px;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 0 16px; }
+  .banner {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+    padding: 32px 16px 44px;
+    margin-bottom: -24px;
+  }
+  .logo-bar { display: flex; align-items: center; justify-content: center; gap: 18px; margin-bottom: 1px; flex-wrap: wrap; }
+  .logo-chip { background: transparent; padding: 0; display: flex; align-items: center; justify-content: center; }
+  .logo-chip img { height: 36px; width: auto; max-width: 140px; object-fit: contain; display: block; filter: brightness(0) invert(1); }
+  .logo-chip--lg img { height: 72px; max-width: 260px; }
+  .logo-divider { width: 1px; height: 30px; background: rgba(255,255,255,0.25); }
+  .header { text-align: center; margin-bottom: 0; }
+  .header h1 {
+    margin: 0 0 3px; font-size: 26px; line-height: 1.2; color: var(--accent-soft);
+    text-transform: uppercase; letter-spacing: .03em; font-weight: 800;
+  }
+  .header .subtitle { color: #f5f7fb; font-size: 15px; font-weight: 700; margin: 0; line-height: 1.3; }
+  .footer {
+    text-align: center; color: var(--muted); font-size: 12.5px; margin-top: 28px;
+    letter-spacing: .02em; line-height: 1.7;
+  }
+  .footer .tagline { font-style: italic; color: #8b95a3; }
+  .footer strong { color: var(--navy); }
+  .card {
+    background: var(--card); border-radius: 14px;
+    box-shadow: 0 16px 40px rgba(11, 31, 58, 0.18); padding: 32px;
+    position: relative; z-index: 2;
+  }
+  .section-title {
+    font-size: 13px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .06em; color: var(--navy); margin: 28px 0 12px;
+    padding-bottom: 6px; border-bottom: 2px solid var(--accent); display: inline-block;
+  }
+  .section-title:first-child { margin-top: 0; }
+  .row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+  .field { flex: 1 1 160px; }
+  label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+  label .opt { font-weight: 400; color: var(--muted); }
+  input[type=text], input[type=email], input[type=tel], select, textarea {
+    width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px;
+    font-size: 16px; font-family: inherit; background: #fafbfc;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  input:focus, select:focus, textarea:focus {
+    outline: none; border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgba(11,31,58,0.1); background: #fff;
+  }
+  textarea { resize: vertical; min-height: 70px; }
+  .req { color: var(--error); }
+  .helper-note { background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; font-size: 13px; color: var(--muted); margin: 0 0 14px; }
+
+  .radio-group, .checkbox-group { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+  .radio-group label, .checkbox-group label {
+    display: flex; align-items: center; gap: 8px; font-weight: 500; font-size: 13.5px;
+    margin: 0; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; cursor: pointer;
+  }
+  .radio-group input, .checkbox-group input { width: auto; margin: 0; accent-color: var(--navy); }
+
+  .autofill-box {
+    background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 14px 16px;
+    font-size: 13.5px; margin-top: 10px; display: none;
+  }
+  .autofill-box .name { font-weight: 700; color: var(--navy); }
+  .autofill-box .details { color: var(--muted); margin-top: 4px; }
+  .autofill-box .edit-link { font-size: 12.5px; color: var(--navy); text-decoration: underline; cursor: pointer; background: none; border: none; padding: 0; margin-top: 8px; }
+
+  .star-rating { display: flex; gap: 6px; margin-top: 4px; }
+  .star-rating button {
+    background: none; border: none; font-size: 30px; line-height: 1; cursor: pointer; padding: 0;
+    color: var(--border); transition: color 0.15s;
+  }
+  .star-rating button.filled { color: var(--accent); }
+
+  .speaker-block { border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-top: 14px; }
+  .speaker-block h3 { font-size: 14.5px; margin: 0 0 12px; color: var(--navy); }
+  .criterion-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 10px; }
+  .criterion-row span { font-size: 13px; color: var(--text); flex: 1; }
+  .criterion-row .star-rating button { font-size: 20px; }
+
+  button.submit {
+    width: 100%; margin-top: 24px; padding: 14px; border: none; border-radius: 8px;
+    background: var(--navy); color: #fff; font-size: 15px; font-weight: 700;
+    letter-spacing: .03em; cursor: pointer; transition: background .15s; text-transform: uppercase;
+  }
+  button.submit:hover { background: var(--navy-light); }
+  button.submit:disabled { background: #9ca3af; cursor: not-allowed; }
+  button.secondary {
+    width: 100%; margin-top: 10px; padding: 12px; border: 1px solid var(--navy); border-radius: 8px;
+    background: #fff; color: var(--navy); font-size: 14px; font-weight: 700; cursor: pointer;
+  }
+
+  .msg { display: none; margin-top: 16px; padding: 12px 14px; border-radius: 8px; font-size: 14px; }
+  .msg.error { display: block; background: #fef2f2; color: var(--error); border: 1px solid #fecaca; }
+
+  .state-screen { text-align: center; padding: 10px 8px; }
+  .state-screen p { color: var(--muted); font-size: 14px; line-height: 1.6; }
+
+  .success-screen { display: none; text-align: center; padding: 20px 8px 8px; }
+  .success-screen.show { display: block; }
+  .success-icon {
+    width: 64px; height: 64px; border-radius: 50%; background: #f0fdf4; border: 2px solid var(--success);
+    display: flex; align-items: center; justify-content: center; margin: 0 auto 18px;
+  }
+  .success-icon svg { width: 30px; height: 30px; }
+  .success-screen h2 { margin: 0 0 10px; font-size: 21px; color: var(--navy); font-weight: 800; }
+  .success-screen p { margin: 0 0 6px; color: var(--text); font-size: 15px; line-height: 1.6; }
+
+  #restOfForm { display: none; }
+
+  @media (max-width: 480px) {
+    .card { padding: 20px; border-radius: 14px; }
+    .row { flex-direction: column; gap: 14px; }
+    .field { flex: 1 1 100%; }
+    .header h1 { font-size: 20px; }
+    .logo-chip img { height: 30px; max-width: 110px; }
+    .banner { padding: 24px 12px 36px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="banner">
+  <div class="wrap" style="padding:0;">
+    <div class="logo-bar" id="logoBar"></div>
+    <div class="header">
+      <h1 id="eventTitle">Event Feedback</h1>
+      <div class="subtitle" id="eventSubtitle"></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="card" id="formCard">
+
+    <div class="state-screen" id="loadingState">
+      <p>Loading feedback form…</p>
+    </div>
+
+    <div class="state-screen" id="invalidState" style="display:none;">
+      <p id="invalidMessage" style="color:var(--error);">This link isn't valid. Please use the link RainPhil Inc. sent you.</p>
+    </div>
+
+    <form id="feedbackForm" style="display:none;">
+
+      <div class="section-title">Who's Giving Feedback</div>
+      <p class="helper-note">Enter your first and last name as you registered — no need to include Jr., III, etc. We'll pull in your contact details automatically.</p>
+      <div class="row">
+        <div class="field"><label>First Name <span class="req">*</span></label><input type="text" id="lookupFirstName"></div>
+        <div class="field"><label>Last Name <span class="req">*</span> <span class="opt">(Jr., III, etc. optional)</span></label><input type="text" id="lookupLastName"></div>
+      </div>
+      <button type="button" class="secondary" id="lookupBtn" style="margin-top:0;">Find my registration</button>
+      <div class="msg error" id="lookupError"></div>
+
+      <div class="autofill-box" id="autofillBox">
+        <div class="name" id="autofillName"></div>
+        <div class="details" id="autofillDetails"></div>
+        <button type="button" class="edit-link" id="editAutofillBtn">These details aren't right — let me edit them</button>
+      </div>
+
+      <div id="manualFields" style="display:none;">
+        <div class="row" style="margin-top:14px;">
+          <div class="field"><label>Phone Number <span class="req">*</span></label><input type="tel" id="m_contactNumber"></div>
+          <div class="field"><label>Email <span class="req">*</span></label><input type="email" id="m_email"></div>
+        </div>
+        <div class="row">
+          <div class="field"><label>Institution <span class="req">*</span></label><input type="text" id="m_institution" list="institutionList" autocomplete="off"><datalist id="institutionList"></datalist></div>
+          <div class="field"><label>Category <span class="req">*</span></label><input type="text" id="m_category" placeholder="e.g. Chemist, Student, Faculty"></div>
+        </div>
+      </div>
+
+      <div id="restOfForm">
+
+        <div id="industryDomainField" style="display:none;">
+          <div class="section-title">Industry / Scientific Domain</div>
+          <select id="f_industryDomain"><option value="">Select…</option></select>
+        </div>
+
+        <div class="section-title">About Your Interest</div>
+        <div class="row">
+          <div class="field">
+            <label>Purpose for Attending the Event <span class="req">*</span></label>
+            <select id="f_purposeForAttending"><option value="">Select…</option></select>
+          </div>
+        </div>
+        <label>Product Area(s) of Interest <span class="req">*</span> <span class="opt">(select all that apply)</span></label>
+        <div class="checkbox-group" id="f_productAreaGroup"></div>
+        <input type="text" id="f_productAreaOther" placeholder="Please specify" style="display:none; margin-top:8px;">
+
+        <div class="row" style="margin-top:14px;">
+          <div class="field">
+            <label>Expected Purchase Timeline <span class="req">*</span></label>
+            <select id="f_expectedPurchaseTimeline"><option value="">Select…</option></select>
+          </div>
+          <div class="field">
+            <label>Budget Status <span class="req">*</span></label>
+            <select id="f_budgetStatus"><option value="">Select…</option></select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label>Your Role in the Budget Process <span class="req">*</span></label>
+            <select id="f_roleInBudgetProcess"><option value="">Select…</option></select>
+          </div>
+        </div>
+
+        <label>I would like to be contacted for… <span class="req">*</span></label>
+        <div class="radio-group" id="f_contactPreferenceGroup"></div>
+
+        <div class="section-title">Overall Seminar Rating</div>
+        <label>How would you rate the overall workshop content? <span class="req">*</span></label>
+        <div class="star-rating" id="overallStars"></div>
+
+        <div class="row" style="margin-top:18px; flex-direction:column;">
+          <div class="field">
+            <label>What are the key learnings you gained? <span class="opt">(optional)</span></label>
+            <textarea id="f_keyLearnings"></textarea>
+          </div>
+          <div class="field">
+            <label>Which topic from the event do you think is most applicable to your laboratory operations? <span class="opt">(optional)</span></label>
+            <textarea id="f_mostApplicableTopic"></textarea>
+          </div>
+          <div class="field">
+            <label>What one improvement or idea from the event could be implemented in your laboratory? <span class="opt">(optional)</span></label>
+            <textarea id="f_improvementIdea"></textarea>
+          </div>
+          <div class="field">
+            <label>What additional training or topics would you like to learn in the future? <span class="opt">(optional)</span></label>
+            <textarea id="f_additionalTrainingTopics"></textarea>
+          </div>
+          <div class="field">
+            <label>Comments and suggestions for improvement of future events. <span class="opt">(optional)</span></label>
+            <textarea id="f_comments"></textarea>
+          </div>
+        </div>
+
+        <div class="section-title">Evaluation of Resource Person(s)</div>
+        <p class="helper-note">Rate each speaker on the criteria below — 1 star is Poor, 5 stars is Excellent.</p>
+        <div id="speakerBlocks"></div>
+
+        <button type="button" class="submit" id="submitBtn">Submit Feedback</button>
+        <div class="msg error" id="formError"></div>
+      </div>
+    </form>
+
+    <div class="success-screen" id="successScreen">
+      <div class="success-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5 13l4 4L19 7" stroke="#16a34a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h2>Thank You!</h2>
+      <p>Your feedback has been recorded. We appreciate you taking the time.</p>
+    </div>
+
+  </div>
+  <div class="footer">
+    <div class="tagline">RainLab. Building Connections. Driving Discoveries.</div>
+    <div>Presented by <strong>RainPhil.com</strong></div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// Same pattern as your registration form's EVENT_CONFIG — duplicate this
+// file's folder per event, and edit only the values below. webAppUrl is
+// the same /exec URL your registration form already uses; no separate
+// deployment is needed since this posts to the same Apps Script project.
+// ============================================================
+const EVENT_CONFIG = {
+  eventCode: "TINYTRACESAHANDSONMICROPLASTICSWORKSHOP",
+  eventName: "Tiny Traces: A Hands-on Microplastics Workshop",
+  eventSubtitle: "We'd love your feedback",
+  orgName: "RainPhil Inc.",
+  logoUrl: "https://rainphil.com/images/rainphil-logo.png",
+  partnerLogos: [
+    "https://tse2.mm.bing.net/th/id/OIP._kOzoycMlaV9AEusci7OIAHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+  ],
+  webAppUrl: "https://script.google.com/macros/s/AKfycbx0fOMWlJnimqhbFo6DTeWFYQr1qUT4NfIqRiIClBCmuPuxLN-Xx7O0wQNwlg8XNe5V/exec"
+};
+
+document.getElementById("eventTitle").textContent = EVENT_CONFIG.eventName;
+document.getElementById("eventSubtitle").textContent = EVENT_CONFIG.eventSubtitle;
+
+// Build logo bar — identical approach to the registration form.
+(function renderLogos() {
+  const bar = document.getElementById("logoBar");
+  const allLogos = [];
+  if (EVENT_CONFIG.logoUrl) allLogos.push(EVENT_CONFIG.logoUrl);
+  const partners = (EVENT_CONFIG.partnerLogos || []).filter(Boolean);
+
+  if (allLogos.length && partners.length) {
+    allLogos.forEach(url => bar.appendChild(makeChip(url)));
+    const div = document.createElement("div");
+    div.className = "logo-divider";
+    bar.appendChild(div);
+    partners.forEach(url => bar.appendChild(makeChip(url, true)));
+  } else {
+    allLogos.concat(partners).forEach(url => bar.appendChild(makeChip(url)));
+  }
+
+  function makeChip(url, large) {
+    const chip = document.createElement("div");
+    chip.className = "logo-chip" + (large ? " logo-chip--lg" : "");
+    const img = document.createElement("img");
+    img.src = url;
+    img.alt = "logo";
+    chip.appendChild(img);
+    return chip;
+  }
+})();
+
+let bootstrap = null;
+let selectedMatch = null;
+let overallRatingValue = 0;
+const speakerRatings = {};
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+}
+
+// Institution typeahead — suggestions are fetched as you type (2+ letters), a few at a
+// time, and never force a selection: you can always just type the real name, and a
+// new one is added to the shared list automatically when you submit (exactly as typed).
+(function setupInstitutionTypeahead() {
+  const input = document.getElementById("m_institution");
+  const datalist = document.getElementById("institutionList");
+  if (!input || !datalist) return;
+  let timer = null, lastQuery = "";
+  input.addEventListener("input", function () {
+    const q = input.value.trim();
+    clearTimeout(timer);
+    if (q.length < 2) { datalist.innerHTML = ""; lastQuery = ""; return; }
+    timer = setTimeout(async function () {
+      if (q === lastQuery) return;
+      lastQuery = q;
+      try {
+        const res = await fetch(EVENT_CONFIG.webAppUrl + "?action=institutionList&q=" + encodeURIComponent(q));
+        const result = JSON.parse(await res.text());
+        if (!result.ok || !Array.isArray(result.institutions)) return;
+        if (input.value.trim() !== q) return; // they've kept typing — this answer is stale
+        datalist.innerHTML = "";
+        result.institutions.forEach(name => {
+          const opt = document.createElement("option");
+          opt.value = name;
+          datalist.appendChild(opt);
+        });
+      } catch (err) {
+        // Suggestions are a nice-to-have; the plain field still works if this fails.
+        console.warn("Could not load institution suggestions:", err);
+      }
+    }, 250);
+  });
+})();
+
+async function init() {
+  try {
+    const url = `${EVENT_CONFIG.webAppUrl}?action=feedbackBootstrap&code=${encodeURIComponent(EVENT_CONFIG.eventCode)}`;
+    const res = await fetch(url);
+    const rawText = await res.text();
+    let data;
+    try {
+      data = JSON.parse(rawText);
+    } catch (parseErr) {
+      console.error("[feedback] response was not valid JSON:", rawText);
+      throw new Error("Unexpected response from the server.");
+    }
+
+    if (!data.ok) {
+      document.getElementById("invalidMessage").textContent = data.error || "This event link isn't valid.";
+      document.getElementById("loadingState").style.display = "none";
+      document.getElementById("invalidState").style.display = "block";
+      return;
+    }
+
+    bootstrap = data;
+    buildStaticOptions();
+    document.getElementById("loadingState").style.display = "none";
+    document.getElementById("feedbackForm").style.display = "block";
+  } catch (err) {
+    console.error("[feedback] bootstrap failed:", err);
+    document.getElementById("invalidMessage").textContent = "Couldn't reach the feedback service. Please try again shortly.";
+    document.getElementById("loadingState").style.display = "none";
+    document.getElementById("invalidState").style.display = "block";
+  }
+}
+
+function fillSelect(id, options) {
+  const el = document.getElementById(id);
+  el.innerHTML = '<option value="">Select…</option>' + options.map(o => `<option value="${escapeHtml(o)}">${escapeHtml(o)}</option>`).join("");
+}
+
+function buildStarButtons(count) {
+  let html = "";
+  for (let i = 1; i <= count; i++) html += `<button type="button" data-value="${i}">★</button>`;
+  return html;
+}
+
+function wireStarGroup(container, onChange) {
+  const buttons = container.querySelectorAll("button");
+  buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const val = Number(btn.getAttribute("data-value"));
+      buttons.forEach(b => b.classList.toggle("filled", Number(b.getAttribute("data-value")) <= val));
+      onChange(val);
+    });
+  });
+}
+
+function buildStaticOptions() {
+  const opts = bootstrap.options;
+
+  if (bootstrap.isWatersEvent) {
+    document.getElementById("industryDomainField").style.display = "block";
+    fillSelect("f_industryDomain", opts.industryDomains);
+  }
+  fillSelect("f_purposeForAttending", opts.purposes);
+  fillSelect("f_expectedPurchaseTimeline", opts.timelines);
+  fillSelect("f_budgetStatus", opts.budgetStatuses);
+  fillSelect("f_roleInBudgetProcess", opts.budgetRoles);
+
+  document.getElementById("f_productAreaGroup").innerHTML = opts.productAreas.map(pa => `
+    <label><input type="checkbox" name="productArea" value="${escapeHtml(pa)}"> ${escapeHtml(pa)}</label>
+  `).join("");
+  // If the event's product area list includes an "Others" option (however
+  // it's capitalized — set per-event via the Events sheet's
+  // FeedbackProductAreas column, or in the default list), checking it
+  // reveals a free-text field so they can specify what it is.
+  const otherCheckbox = Array.from(document.querySelectorAll('#f_productAreaGroup input[type="checkbox"]')).find(el => /^others?$/i.test(el.value.trim()));
+  const otherInput = document.getElementById("f_productAreaOther");
+  if (otherCheckbox) {
+    otherCheckbox.addEventListener("change", function () {
+      otherInput.style.display = this.checked ? "block" : "none";
+      if (!this.checked) otherInput.value = "";
+    });
+  } else {
+    otherInput.style.display = "none";
+  }
+
+  document.getElementById("f_contactPreferenceGroup").innerHTML = opts.contactPreferences.map(cp => `
+    <label><input type="radio" name="contactPreference" value="${escapeHtml(cp)}"> ${escapeHtml(cp)}</label>
+  `).join("");
+
+  overallRatingValue = 0;
+  const overallStars = document.getElementById("overallStars");
+  overallStars.innerHTML = buildStarButtons(5);
+  wireStarGroup(overallStars, (val) => { overallRatingValue = val; });
+
+  const speakerBlocks = document.getElementById("speakerBlocks");
+  if (!bootstrap.speakers.length) {
+    speakerBlocks.innerHTML = '<p style="font-size:13px; color:var(--muted);">No resource persons listed for this event yet — you can skip this section.</p>';
+  } else {
+    speakerBlocks.innerHTML = bootstrap.speakers.map(name => {
+      speakerRatings[name] = { ratings: {}, comments: "" };
+      const criteriaRows = opts.speakerCriteria.map(c => `
+        <div class="criterion-row">
+          <span>${escapeHtml(c.label)}</span>
+          <div class="star-rating" data-speaker="${escapeHtml(name)}" data-key="${c.key}">${buildStarButtons(5)}</div>
+        </div>
+      `).join("");
+      return `
+        <div class="speaker-block">
+          <h3>${escapeHtml(name)}</h3>
+          ${criteriaRows}
+          <label style="margin-top:10px;">Comments on ${escapeHtml(name)} <span class="opt">(optional)</span></label>
+          <textarea data-speaker-comments="${escapeHtml(name)}"></textarea>
+        </div>
+      `;
+    }).join("");
+
+    document.querySelectorAll('.star-rating[data-speaker]').forEach(group => {
+      const speaker = group.getAttribute("data-speaker");
+      const key = group.getAttribute("data-key");
+      wireStarGroup(group, (val) => { speakerRatings[speaker].ratings[key] = val; });
+    });
+    document.querySelectorAll('textarea[data-speaker-comments]').forEach(ta => {
+      ta.addEventListener("input", () => { speakerRatings[ta.getAttribute("data-speaker-comments")].comments = ta.value; });
+    });
+  }
+}
+
+document.getElementById("lookupBtn").addEventListener("click", async function () {
+  const first = document.getElementById("lookupFirstName").value.trim();
+  const last = document.getElementById("lookupLastName").value.trim();
+  const errEl = document.getElementById("lookupError");
+  errEl.style.display = "none";
+
+  if (!first || !last) {
+    errEl.textContent = "Please enter both your first and last name.";
+    errEl.style.display = "block";
+    return;
+  }
+
+  this.disabled = true;
+  this.textContent = "Looking up…";
+
+  try {
+    const url = `${EVENT_CONFIG.webAppUrl}?action=lookupFeedbackParticipant&code=${encodeURIComponent(EVENT_CONFIG.eventCode)}` +
+      `&firstName=${encodeURIComponent(first)}&lastName=${encodeURIComponent(last)}`;
+    const res = await fetch(url);
+    const data = JSON.parse(await res.text());
+
+    this.disabled = false;
+    this.textContent = "Find my registration";
+
+    if (!data.ok) {
+      errEl.textContent = data.error || "We couldn't find that registration.";
+      errEl.style.display = "block";
+      showManualFields();
+      return;
+    }
+
+    selectedMatch = data.matches[0];
+    showAutofill(selectedMatch);
+    document.getElementById("restOfForm").style.display = "block";
+  } catch (err) {
+    this.disabled = false;
+    this.textContent = "Find my registration";
+    errEl.textContent = "Something went wrong looking that up. Please try again.";
+    errEl.style.display = "block";
+  }
+});
+
+function showAutofill(match) {
+  document.getElementById("manualFields").style.display = "none";
+  const box = document.getElementById("autofillBox");
+  box.style.display = "block";
+  document.getElementById("autofillName").textContent = `${match.firstName} ${match.lastName}`;
+  document.getElementById("autofillDetails").textContent =
+    `${match.institution} · ${match.category} · ${match.email} · ${match.contactNumber}`;
+}
+
+document.getElementById("editAutofillBtn").addEventListener("click", function () {
+  document.getElementById("autofillBox").style.display = "none";
+  showManualFields(selectedMatch);
+  selectedMatch = null;
+});
+
+function showManualFields(prefill) {
+  document.getElementById("manualFields").style.display = "block";
+  if (prefill) {
+    document.getElementById("m_contactNumber").value = prefill.contactNumber || "";
+    document.getElementById("m_email").value = prefill.email || "";
+    document.getElementById("m_institution").value = prefill.institution || "";
+    document.getElementById("m_category").value = prefill.category || "";
+  }
+  document.getElementById("restOfForm").style.display = "block";
+}
+
+document.getElementById("submitBtn").addEventListener("click", async function () {
+  const errEl = document.getElementById("formError");
+  errEl.style.display = "none";
+
+  const first = document.getElementById("lookupFirstName").value.trim();
+  const last = document.getElementById("lookupLastName").value.trim();
+  if (!first || !last) {
+    errEl.textContent = "Please enter your name above and find your registration first.";
+    errEl.style.display = "block";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    return;
+  }
+
+  const usingManual = document.getElementById("manualFields").style.display === "block";
+  const contactNumber = usingManual ? document.getElementById("m_contactNumber").value.trim() : (selectedMatch && selectedMatch.contactNumber);
+  const email = usingManual ? document.getElementById("m_email").value.trim() : (selectedMatch && selectedMatch.email);
+  const institution = usingManual ? document.getElementById("m_institution").value.trim() : (selectedMatch && selectedMatch.institution);
+  const category = usingManual ? document.getElementById("m_category").value.trim() : (selectedMatch && selectedMatch.category);
+
+  const productAreas = Array.from(document.querySelectorAll('input[name="productArea"]:checked')).map(el => el.value);
+  // If "Others" was checked, replace the bare word with "Others: <what they
+  // typed>" so the actual specification is what gets stored — not just the
+  // word "Others" on its own.
+  const otherIdx = productAreas.findIndex(v => /^others?$/i.test(v.trim()));
+  if (otherIdx !== -1) {
+    const otherText = document.getElementById("f_productAreaOther").value.trim();
+    if (otherText) productAreas[otherIdx] = `Others: ${otherText}`;
+  }
+  const contactPreferenceEl = document.querySelector('input[name="contactPreference"]:checked');
+
+  const payload = {
+    eventCode: EVENT_CONFIG.eventCode,
+    firstName: first,
+    lastName: last,
+    contactNumber: contactNumber,
+    email: email,
+    institution: institution,
+    category: category,
+    industryDomain: bootstrap.isWatersEvent ? document.getElementById("f_industryDomain").value : "",
+    purposeForAttending: document.getElementById("f_purposeForAttending").value,
+    productAreaOfInterest: productAreas,
+    expectedPurchaseTimeline: document.getElementById("f_expectedPurchaseTimeline").value,
+    budgetStatus: document.getElementById("f_budgetStatus").value,
+    roleInBudgetProcess: document.getElementById("f_roleInBudgetProcess").value,
+    contactPreference: contactPreferenceEl ? contactPreferenceEl.value : "",
+    overallRating: overallRatingValue,
+    keyLearnings: document.getElementById("f_keyLearnings").value.trim(),
+    mostApplicableTopic: document.getElementById("f_mostApplicableTopic").value.trim(),
+    improvementIdea: document.getElementById("f_improvementIdea").value.trim(),
+    additionalTrainingTopics: document.getElementById("f_additionalTrainingTopics").value.trim(),
+    comments: document.getElementById("f_comments").value.trim(),
+    registrationId: selectedMatch ? selectedMatch.registrationId : "",
+    participantId: selectedMatch ? selectedMatch.participantId : "",
+    speakerRatings: Object.keys(speakerRatings)
+      .filter(name => Object.keys(speakerRatings[name].ratings).length > 0 || speakerRatings[name].comments)
+      .map(name => ({ speakerName: name, ratings: speakerRatings[name].ratings, comments: speakerRatings[name].comments }))
+  };
+
+  const required = ["contactNumber", "email", "institution", "category", "purposeForAttending",
+    "expectedPurchaseTimeline", "budgetStatus", "roleInBudgetProcess", "contactPreference"];
+  const missing = required.find(k => !payload[k] || String(payload[k]).trim() === "");
+  if (missing || !payload.overallRating || payload.productAreaOfInterest.length === 0 ||
+      (bootstrap.isWatersEvent && !payload.industryDomain)) {
+    errEl.textContent = "Please fill in all required fields (marked *), including the overall star rating and at least one product area.";
+    errEl.style.display = "block";
+    errEl.scrollIntoView({ behavior: "smooth", block: "center" });
+    return;
+  }
+
+  const btn = this;
+  btn.disabled = true;
+  btn.textContent = "Submitting...";
+
+  try {
+    const res = await fetch(`${EVENT_CONFIG.webAppUrl}?action=submitFeedback`, {
+      method: "POST",
+      body: JSON.stringify(payload)
+    });
+    const rawText = await res.text();
+    console.log("[feedback] HTTP status:", res.status);
+    console.log("[feedback] raw server response:", rawText);
+
+    let result;
+    try {
+      result = JSON.parse(rawText);
+    } catch (parseErr) {
+      console.error("[feedback] response was not valid JSON:", parseErr);
+      throw new Error("The server returned an unexpected response. Open the browser console (F12) for details.");
+    }
+
+    if (result.ok) {
+      document.getElementById("feedbackForm").style.display = "none";
+      document.getElementById("successScreen").classList.add("show");
+      document.getElementById("successScreen").scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      errEl.textContent = result.error || "Something went wrong. Please try again.";
+      errEl.style.display = "block";
+      btn.disabled = false;
+      btn.textContent = "Submit Feedback";
+    }
+  } catch (err) {
+    console.error("[feedback] submit failed:", err);
+    errEl.textContent = "Something went wrong: " + err.message + ". Please try again, or contact us directly if it persists.";
+    errEl.style.display = "block";
+    btn.disabled = false;
+    btn.textContent = "Submit Feedback";
+  }
+});
+
+init();
+</script>
+</body>
+</html>
