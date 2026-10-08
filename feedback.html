@@ -38,6 +38,7 @@
   .logo-chip { background: transparent; padding: 0; display: flex; align-items: center; justify-content: center; }
   .logo-chip img { height: 36px; width: auto; max-width: 140px; object-fit: contain; display: block; filter: brightness(0) invert(1); }
   .logo-chip--lg img { height: 72px; max-width: 260px; }
+  .logo-chip--color img { filter: none; }  /* a partner logo marked "| color" keeps its own colours */
   .logo-divider { width: 1px; height: 30px; background: rgba(255,255,255,0.25); }
   .header { text-align: center; margin-bottom: 0; }
   .header h1 {
@@ -323,14 +324,18 @@ document.getElementById("eventSubtitle").textContent = EVENT_CONFIG.eventSubtitl
     const div = document.createElement("div");
     div.className = "logo-divider";
     bar.appendChild(div);
-    partners.forEach(url => bar.appendChild(makeChip(url, true)));
+    partners.forEach(p => bar.appendChild(makeChip(logoUrl(p), true, logoKeepsColor(p))));
   } else {
-    allLogos.concat(partners).forEach(url => bar.appendChild(makeChip(url)));
+    allLogos.concat(partners).forEach(p => bar.appendChild(makeChip(logoUrl(p), false, logoKeepsColor(p))));
   }
 
-  function makeChip(url, large) {
+  // A partner logo can be a plain address, or { url, color: true } to keep its original colours
+  // (everything else is shown in white, which suits single-colour logos on the dark banner).
+  function logoUrl(p) { return typeof p === "string" ? p : p.url; }
+  function logoKeepsColor(p) { return typeof p === "object" && !!p.color; }
+  function makeChip(url, large, keepColor) {
     const chip = document.createElement("div");
-    chip.className = "logo-chip" + (large ? " logo-chip--lg" : "");
+    chip.className = "logo-chip" + (large ? " logo-chip--lg" : "") + (keepColor ? " logo-chip--color" : "");
     const img = document.createElement("img");
     img.src = url;
     img.alt = "logo";
