@@ -17,6 +17,7 @@
     --text: #1f2937;
     --muted: #6b7280;
     --border: #e5e7eb;
+    --field-border: #9aa6b6;
     --error: #dc2626;
     --success: #16a34a;
   }
@@ -90,7 +91,7 @@
   .footer .tagline { font-style: italic; color: #8b95a3; }
   .footer strong { color: var(--navy); }
   .card {
-    background: var(--card); border-radius: 14px;
+    background: var(--card); border-radius: 14px; border: 1px solid #d3dae6;
     box-shadow: 0 16px 40px rgba(11, 31, 58, 0.18); padding: 32px;
     position: relative; z-index: 2;
     font-family: 'Manrope', 'Segoe UI', system-ui, sans-serif;
@@ -106,8 +107,8 @@
   label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
   label .opt { font-weight: 400; color: var(--muted); }
   input[type=text], input[type=email], input[type=tel], input[type=date], select, textarea {
-    width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px;
-    font-size: 16px; font-family: inherit; background: #fafbfc;
+    width: 100%; padding: 10px 12px; border: 1.5px solid var(--field-border); border-radius: 8px;
+    font-size: 16px; font-family: inherit; background: #fff;
     transition: border-color .15s, box-shadow .15s;
   }
   input:focus, select:focus, textarea:focus {
@@ -169,10 +170,37 @@
   @media (max-width: 480px) {
     .card { padding: 20px; border-radius: 14px; }
     .row { flex-direction: column; gap: 14px; }
-    .field { flex: 1 1 100%; }
+    .field { flex: 1 1 auto !important; width: 100%; }
     .header h1 { font-size: 20px; }
     .logo-chip img { height: 30px; max-width: 110px; }
     .banner { padding: 24px 12px 36px; }
+  }
+
+  /* ---- Phone comfort: solid, clearly outlined fields and big tap targets ---- */
+  html { -webkit-text-size-adjust: 100%; }
+  input::placeholder, textarea::placeholder { color: #8791a1; opacity: 1; }
+  input[type=text], input[type=email], input[type=tel], input[type=date], select, textarea { min-height: 46px; color: var(--text); }
+  textarea { min-height: 84px; }
+  input[type=checkbox], input[type=radio] { width: 20px !important; height: 20px !important; flex: 0 0 auto; accent-color: var(--navy); }
+  .speaker-list { display: grid; gap: 10px; margin-bottom: 6px; }
+  .speaker-item { border: 1px solid #d3dae6; border-left: 4px solid var(--accent); border-radius: 10px; padding: 10px 14px; background: #fff; }
+  .speaker-item .sp-name { font-weight: 800; color: var(--navy); font-size: 15px; }
+  .speaker-item .sp-role { font-size: 13.5px; color: var(--text); margin-top: 2px; }
+  .speaker-item .sp-co { font-size: 13px; color: var(--muted); }
+  .sp-detail { font-size: 12.5px; color: var(--muted); margin: -8px 0 12px; }
+  @media (max-width: 480px) {
+    label { font-size: 14px; }
+    .card { padding: 18px 16px; }
+    .logo-chip--lg img { height: 52px; }
+    button.submit, button.primary { padding: 16px; font-size: 16px; min-height: 52px; }
+    button.secondary { padding: 14px; font-size: 15px; min-height: 48px; }
+    .radio-group label, .checkbox-group label { padding: 13px 12px; font-size: 14.5px; }
+    .criterion-row { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .star-rating button { padding: 2px 4px; }
+    .criterion-row .star-rating button { font-size: 28px; }
+    .yn-row { flex-direction: column; }
+    .header h1 { overflow-wrap: anywhere; }
+    .section-title { font-size: 14px; }
   }
 </style>
 </head>
@@ -191,6 +219,10 @@
 <div class="wrap">
   <div class="card" id="formCard">
     <form id="regForm">
+            <div id="speakersSection" style="display:none;">
+        <div class="section-title">Resource Speakers</div>
+        <div class="speaker-list" id="speakerList"></div>
+      </div>
       <div class="section-title">Personal Information</div>
       <div class="row">
         <div class="field"><label>First Name <span class="req">*</span></label><input type="text" name="firstName" required></div>
@@ -340,12 +372,13 @@ const EVENT_CONFIG = {
   eventSubtitle2: "",
   eventDateDisplay: "17 November 2026",
   eventTimeDisplay: "09:00 to 05:00",
-  venue: "Mindanao State University - Naawan",
+  venue: "Mindanao State University at Naawan",
   orgName: "RainPhil Inc.",
   logoUrl: "https://rainphil.com/images/rainphil-logo.png",
   partnerLogos: [
     { url: "msu-logo.png", color: true }
   ],
+  speakers: [],
   webAppUrl: "https://script.google.com/macros/s/AKfycbx0fOMWlJnimqhbFo6DTeWFYQr1qUT4NfIqRiIClBCmuPuxLN-Xx7O0wQNwlg8XNe5V/exec"
 };
 document.getElementById("orgLabelInline").textContent = EVENT_CONFIG.orgName;
@@ -384,6 +417,25 @@ document.getElementById("eventDateTime").innerHTML =
     chip.appendChild(img);
     return chip;
   }
+})();
+// Resource speakers (name, position, company) — shown only when the event has some
+(function renderSpeakers() {
+  const list = (EVENT_CONFIG.speakers || []).filter(s => s && s.name);
+  if (!list.length) return;
+  const box = document.getElementById("speakerList");
+  list.forEach(s => {
+    const item = document.createElement("div");
+    item.className = "speaker-item";
+    [["sp-name", s.name], ["sp-role", s.position], ["sp-co", s.company]].forEach(pair => {
+      if (!pair[1]) return;
+      const line = document.createElement("div");
+      line.className = pair[0];
+      line.textContent = pair[1];
+      item.appendChild(line);
+    });
+    box.appendChild(item);
+  });
+  document.getElementById("speakersSection").style.display = "";
 })();
 document.getElementById("category").addEventListener("change", function () {
   document.getElementById("categorySpecifyField").style.display = (this.value === "Others") ? "block" : "none";
