@@ -17,6 +17,7 @@
     --text: #1f2937;
     --muted: #6b7280;
     --border: #e5e7eb;
+    --field-border: #9aa6b6;
     --error: #dc2626;
     --success: #16a34a;
   }
@@ -53,7 +54,7 @@
   .footer .tagline { font-style: italic; color: #8b95a3; }
   .footer strong { color: var(--navy); }
   .card {
-    background: var(--card); border-radius: 14px;
+    background: var(--card); border-radius: 14px; border: 1px solid #d3dae6;
     box-shadow: 0 16px 40px rgba(11, 31, 58, 0.18); padding: 32px;
     position: relative; z-index: 2;
   }
@@ -68,8 +69,8 @@
   label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
   label .opt { font-weight: 400; color: var(--muted); }
   input[type=text], input[type=email], input[type=tel], select, textarea {
-    width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px;
-    font-size: 16px; font-family: inherit; background: #fafbfc;
+    width: 100%; padding: 10px 12px; border: 1.5px solid var(--field-border); border-radius: 8px;
+    font-size: 16px; font-family: inherit; background: #fff;
     transition: border-color .15s, box-shadow .15s;
   }
   input:focus, select:focus, textarea:focus {
@@ -83,7 +84,7 @@
   .radio-group, .checkbox-group { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
   .radio-group label, .checkbox-group label {
     display: flex; align-items: center; gap: 8px; font-weight: 500; font-size: 13.5px;
-    margin: 0; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; cursor: pointer;
+    margin: 0; padding: 10px 12px; border: 1.5px solid var(--field-border); border-radius: 8px; cursor: pointer;
   }
   .radio-group input, .checkbox-group input { width: auto; margin: 0; accent-color: var(--navy); }
 
@@ -98,11 +99,11 @@
   .star-rating { display: flex; gap: 6px; margin-top: 4px; }
   .star-rating button {
     background: none; border: none; font-size: 30px; line-height: 1; cursor: pointer; padding: 0;
-    color: var(--border); transition: color 0.15s;
+    color: #c3cad6; transition: color 0.15s;
   }
   .star-rating button.filled { color: var(--accent); }
 
-  .speaker-block { border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-top: 14px; }
+  .speaker-block { border: 1px solid #d3dae6; border-radius: 10px; padding: 16px; margin-top: 14px; }
   .speaker-block h3 { font-size: 14.5px; margin: 0 0 12px; color: var(--navy); }
   .criterion-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 10px; }
   .criterion-row span { font-size: 13px; color: var(--text); flex: 1; }
@@ -141,10 +142,37 @@
   @media (max-width: 480px) {
     .card { padding: 20px; border-radius: 14px; }
     .row { flex-direction: column; gap: 14px; }
-    .field { flex: 1 1 100%; }
+    .field { flex: 1 1 auto !important; width: 100%; }
     .header h1 { font-size: 20px; }
     .logo-chip img { height: 30px; max-width: 110px; }
     .banner { padding: 24px 12px 36px; }
+  }
+
+  /* ---- Phone comfort: solid, clearly outlined fields and big tap targets ---- */
+  html { -webkit-text-size-adjust: 100%; }
+  input::placeholder, textarea::placeholder { color: #8791a1; opacity: 1; }
+  input[type=text], input[type=email], input[type=tel], input[type=date], select, textarea { min-height: 46px; color: var(--text); }
+  textarea { min-height: 84px; }
+  input[type=checkbox], input[type=radio] { width: 20px !important; height: 20px !important; flex: 0 0 auto; accent-color: var(--navy); }
+  .speaker-list { display: grid; gap: 10px; margin-bottom: 6px; }
+  .speaker-item { border: 1px solid #d3dae6; border-left: 4px solid var(--accent); border-radius: 10px; padding: 10px 14px; background: #fff; }
+  .speaker-item .sp-name { font-weight: 800; color: var(--navy); font-size: 15px; }
+  .speaker-item .sp-role { font-size: 13.5px; color: var(--text); margin-top: 2px; }
+  .speaker-item .sp-co { font-size: 13px; color: var(--muted); }
+  .sp-detail { font-size: 12.5px; color: var(--muted); margin: -8px 0 12px; }
+  @media (max-width: 480px) {
+    label { font-size: 14px; }
+    .card { padding: 18px 16px; }
+    .logo-chip--lg img { height: 52px; }
+    button.submit, button.primary { padding: 16px; font-size: 16px; min-height: 52px; }
+    button.secondary { padding: 14px; font-size: 15px; min-height: 48px; }
+    .radio-group label, .checkbox-group label { padding: 13px 12px; font-size: 14.5px; }
+    .criterion-row { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .star-rating button { padding: 2px 4px; }
+    .criterion-row .star-rating button { font-size: 28px; }
+    .yn-row { flex-direction: column; }
+    .header h1 { overflow-wrap: anywhere; }
+    .section-title { font-size: 14px; }
   }
 </style>
 </head>
@@ -306,6 +334,7 @@ const EVENT_CONFIG = {
   partnerLogos: [
     { url: "msu-logo.png", color: true }
   ],
+  speakers: [],
   webAppUrl: "https://script.google.com/macros/s/AKfycbx0fOMWlJnimqhbFo6DTeWFYQr1qUT4NfIqRiIClBCmuPuxLN-Xx7O0wQNwlg8XNe5V/exec"
 };
 
@@ -443,6 +472,15 @@ function wireStarGroup(container, onChange) {
   });
 }
 
+// Position / company of a speaker, taken from the page's own speaker list
+function speakerDetailHtml(name) {
+  const key = String(name).toLowerCase().replace(/\s+/g, " ").trim();
+  const hit = (EVENT_CONFIG.speakers || []).find(s => s && String(s.name).toLowerCase().replace(/\s+/g, " ").trim() === key);
+  if (!hit) return "";
+  const bits = [hit.position, hit.company].filter(Boolean).map(escapeHtml).join(" · ");
+  return bits ? '<div class="sp-detail">' + bits + "</div>" : "";
+}
+
 function buildStaticOptions() {
   const opts = bootstrap.options;
 
@@ -496,7 +534,7 @@ function buildStaticOptions() {
       `).join("");
       return `
         <div class="speaker-block">
-          <h3>${escapeHtml(name)}</h3>
+          <h3>${escapeHtml(name)}</h3>${speakerDetailHtml(name)}
           ${criteriaRows}
           <label style="margin-top:10px;">Comments on ${escapeHtml(name)} <span class="opt">(optional)</span></label>
           <textarea data-speaker-comments="${escapeHtml(name)}"></textarea>
